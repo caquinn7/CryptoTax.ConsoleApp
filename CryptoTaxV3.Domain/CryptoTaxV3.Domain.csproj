@@ -1,0 +1,100 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Integrations\" />
+    <None Remove="Dapper" />
+    <None Remove="System.Data.SQLite.Core" />
+    <None Remove="Sources\" />
+    <None Remove="Products\" />
+    <None Remove="Coins\" />
+    <None Remove="Coins\DAL\" />
+    <None Remove="Transactions\" />
+    <None Remove="Transactions\DAL\" />
+    <None Remove="Transactions\Importers\" />
+    <None Remove="Integrations\CoinbasePro\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Flurl.Http" />
+    <None Remove="Microsoft.Extensions.Configuration" />
+    <None Remove="Integrations\Kraken\" />
+    <None Remove="Microsoft.Extensions.Logging" />
+    <None Remove="Integrations\Binance\" />
+    <None Remove="Integrations\Coinbase\" />
+    <None Remove="Integrations\CoinEx\" />
+    <None Remove="Dapper.Contrib" />
+    <None Remove="Transactions\Importers\Factory\" />
+    <None Remove="Integrations\CoinPaprika\" />
+    <None Remove="Credentials\" />
+    <None Remove="Credentials\DAL\" />
+    <None Remove="CsvHelper" />
+    <None Remove="CoinLookup\" />
+    <None Remove="CoinLookup\DAL\" />
+    <None Remove="Services\" />
+    <None Remove="Products\Accounts\" />
+    <None Remove="Products\Accounts\DAL\" />
+    <None Remove="Products\Markets\" />
+    <None Remove="Products\Accounts\Importer\" />
+    <None Remove="Products\Markets\Importer\" />
+    <None Remove="Products\Markets\Importer\Factory\" />
+    <None Remove="Products\Importer\" />
+    <None Remove="System.IO.Abstractions" />
+    <None Remove="Infrastructure\" />
+    <None Remove="Infrastructure\Exceptions\" />
+    <None Remove="Infrastructure\ICsvReader\" />
+    <None Remove="AppSettings\" />
+    <None Remove="AppSettings\DAL\" />
+    <None Remove="Services\CoinData\" />
+    <None Remove="Transactions\DTO\" />
+    <None Remove="FormEntries\" />
+    <None Remove="Infrastructure\DataAccess\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Integrations\" />
+    <Folder Include="Sources\" />
+    <Folder Include="Products\" />
+    <Folder Include="Coins\" />
+    <Folder Include="Coins\DAL\" />
+    <Folder Include="Transactions\" />
+    <Folder Include="Transactions\DAL\" />
+    <Folder Include="Transactions\Importers\" />
+    <Folder Include="Integrations\CoinbasePro\" />
+    <Folder Include="Integrations\Kraken\" />
+    <Folder Include="Integrations\Binance\" />
+    <Folder Include="Integrations\Coinbase\" />
+    <Folder Include="Integrations\CoinEx\" />
+    <Folder Include="Transactions\Importers\Factory\" />
+    <Folder Include="Integrations\CoinPaprika\" />
+    <Folder Include="Credentials\" />
+    <Folder Include="Credentials\DAL\" />
+    <Folder Include="CoinLookups\" />
+    <Folder Include="CoinLookups\DAL\" />
+    <Folder Include="Services\" />
+    <Folder Include="Products\Accounts\" />
+    <Folder Include="Products\Accounts\DAL\" />
+    <Folder Include="Products\Markets\" />
+    <Folder Include="Products\Accounts\Importers\" />
+    <Folder Include="Products\Markets\Importers\" />
+    <Folder Include="Products\Markets\Importers\Factory\" />
+    <Folder Include="Products\Importer\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Exceptions\" />
+    <Folder Include="Infrastructure\Csv\" />
+    <Folder Include="AppSettings\" />
+    <Folder Include="AppSettings\DAL\" />
+    <Folder Include="Services\CoinData\" />
+    <Folder Include="Transactions\DTO\" />
+    <Folder Include="FormEntries\" />
+    <Folder Include="Infrastructure\DataAccess\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Flurl.Http" Version="3.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+    <PackageReference Include="CsvHelper" Version="27.2.1" />
+  </ItemGroup>
+</Project>

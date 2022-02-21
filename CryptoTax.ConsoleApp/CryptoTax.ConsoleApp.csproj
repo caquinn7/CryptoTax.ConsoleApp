@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>c26de5c8-4387-44f3-8004-3eabbc42a2a6</UserSecretsId>
+    <Configurations>Release;Debug</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DocumentationFile></DocumentationFile>
+    <ConsolePause>true</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="System.Data.SQLite.Core" />
+    <None Remove="Microsoft.Extensions.DependencyInjection" />
+    <None Remove="Microsoft.Extensions.Configuration" />
+    <None Remove="Microsoft.Extensions.Configuration.Json" />
+    <None Remove="Microsoft.Extensions.Configuration.FileExtensions" />
+    <None Remove="appsettings.json" />
+    <None Remove="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <None Remove="appsettings.Development.json" />
+    <None Remove="Serilog.Settings.Configuration" />
+    <None Remove="Serilog.Extensions.Hosting" />
+    <None Remove="Serilog.Sinks.Console" />
+    <None Remove="Serilog.Sinks.File" />
+    <None Remove="Microsoft.Extensions.Hosting" />
+    <None Remove="Serilog.Formatting.Compact" />
+    <None Remove="System.IO.FileSystem" />
+    <None Remove="System.Text.Encoding.Extensions" />
+    <None Remove="System.Threading.Timer" />
+    <None Remove="EasyConsoleCore" />
+    <None Remove="ConsoleTables" />
+    <None Remove="CommandLineParser" />
+    <None Remove="Commands\" />
+    <None Remove="Commands\Factory\" />
+    <None Remove="Microsoft.Extensions.Configuration.UserSecrets" />
+    <None Remove="System.IO.Abstractions" />
+    <None Remove="Commands\Implementations\" />
+    <None Remove="Database\" />
+    <None Remove="Database\db_schema.sql" />
+    <None Remove="Database\crypto_tax.db" />
+    <None Remove="App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+    <PackageReference Include="ConsoleTables" Version="2.4.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\db_schema.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\crypto_tax.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Commands\Factory\" />
+    <Folder Include="Commands\Implementations\" />
+    <Folder Include="Database\" />
+    <Folder Include="App\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoTaxV3.Domain\CryptoTaxV3.Domain.csproj" />
+  </ItemGroup>
+</Project>
