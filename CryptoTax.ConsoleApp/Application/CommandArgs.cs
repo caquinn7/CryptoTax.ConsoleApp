@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 
 namespace CryptoTax.ConsoleApp.Application
 {
-    public class CommandArgs : IEnumerable<string>
+    public class CommandArgs
     {
         private readonly ImmutableArray<string> _args;
 
@@ -22,8 +20,5 @@ namespace CryptoTax.ConsoleApp.Application
 
         public string GetArg(string key, bool isPair = true) =>
             _args.SkipWhile(a => a != key).Skip(isPair ? 1 : 0).FirstOrDefault();
-
-        public IEnumerator<string> GetEnumerator() => _args.ToList().GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
