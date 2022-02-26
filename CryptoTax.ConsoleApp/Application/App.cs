@@ -26,30 +26,54 @@ namespace CryptoTax.ConsoleApp.Application
 
         public void Setup()
         {
-            bool coinsImported = _appSettings.Get<bool>(AppSettingKey.COINS_IMPORTED);
-            if (!coinsImported)
+            bool setupComplete = false;
+            do
             {
-                Output.WriteLine("Importing coins...");
-                ExecuteCommand("coins import");
-                SetAppSetting(AppSettingKey.COINS_IMPORTED);
-            }
+                try
+                {
+                    bool coinsImported = _appSettings.Get<bool>(AppSettingKey.COINS_IMPORTED);
+                    if (!coinsImported)
+                    {
+                        Output.WriteLine("Importing coins...");
+                        ExecuteCommand("coins import");
+                        SetAppSetting(AppSettingKey.COINS_IMPORTED);
+                    }
 
-            bool credsImported = _appSettings.Get<bool>(AppSettingKey.CREDS_IMPORTED);
-            if (!credsImported)
-            {
-                Output.Write("Enter path for credentials file: ");
-                string path = Console.ReadLine().Trim();
-                ExecuteCommand($"credentials import -f {path}");
-                SetAppSetting(AppSettingKey.CREDS_IMPORTED);
-            }
+                    bool coinLookupsImported = _appSettings.Get<bool>(AppSettingKey.COINLOOKUPS_IMPORTED);
+                    if (!coinLookupsImported)
+                    {
+                        Output.Write("Enter path for coin lookups file: ");
+                        string path = Console.ReadLine().Trim();
+                        ExecuteCommand($"coinlookups import -f {path}");
+                        SetAppSetting(AppSettingKey.COINLOOKUPS_IMPORTED);
+                    }
 
-            bool productsImported = _appSettings.Get<bool>(AppSettingKey.PRODUCTS_IMPORTED);
-            if (!productsImported)
-            {
-                Output.WriteLine("Importing products...");
-                ExecuteCommand("products");
-                SetAppSetting(AppSettingKey.PRODUCTS_IMPORTED);
-            }
+                    bool credsImported = _appSettings.Get<bool>(AppSettingKey.CREDS_IMPORTED);
+                    if (!credsImported)
+                    {
+                        Output.Write("Enter path for credentials file: ");
+                        string path = Console.ReadLine().Trim();
+                        ExecuteCommand($"credentials import -f {path}");
+                        SetAppSetting(AppSettingKey.CREDS_IMPORTED);
+                    }
+
+                    bool productsImported = _appSettings.Get<bool>(AppSettingKey.PRODUCTS_IMPORTED);
+                    if (!productsImported)
+                    {
+                        Output.WriteLine("Importing products...");
+                        ExecuteCommand("products");
+                        SetAppSetting(AppSettingKey.PRODUCTS_IMPORTED);
+                    }
+
+                    setupComplete = true;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error setting up application:\n{ex}", ex.ToString());
+                    Output.WriteError(ex.Message);
+                }
+
+            } while (!setupComplete);
 
             void SetAppSetting(string key) => _appSettings.AddOrUpdate(key, true);
         }
@@ -61,33 +85,33 @@ namespace CryptoTax.ConsoleApp.Application
             {
                 Output.WritePrompt();
                 input = Console.ReadLine().Trim();
-                ExecuteCommand(input);
+                try
+                {
+                    ExecuteCommand(input);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is ConfigurationException ||
+                        ex is InsufficientBalanceException ||
+                        ex is ValidationException)
+                    {
+                        Output.WriteLine(ex.Message);
+                    }
+                    else
+                    {
+                        _logger.LogError("Error executing command:\n{ex}", ex.ToString());
+                        Output.WriteError(ex.Message);
+                    }
+                }
 
             } while (input.ToLower() != "quit");
         }
 
         private void ExecuteCommand(string input)
         {
-            try
-            {
-                var args = CommandArgs.From(input);
-                ICommand command = _commandFactory.GetCommand(args[0]);
-                command.Execute(args);
-            }
-            catch (Exception ex)
-            {
-                if (ex is ConfigurationException ||
-                    ex is InsufficientBalanceException ||
-                    ex is ValidationException)
-                {
-                    Output.WriteLine(ex.Message);
-                }
-                else
-                {
-                    _logger.LogError("Error executing command:\n{ex}", ex.ToString());
-                    Output.WriteError(ex.Message);
-                }
-            }
+            var args = CommandArgs.From(input);
+            ICommand command = _commandFactory.GetCommand(args[0]);
+            command.Execute(args);
         }
     }
 }

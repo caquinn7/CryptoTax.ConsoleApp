@@ -12,6 +12,7 @@
         public const string LOGS_OUTFILE = "LogsExportFile";
 
         public const string COINS_IMPORTED = "CoinsImported";
+        public const string COINLOOKUPS_IMPORTED = "CoinLookupsImported";
         public const string CREDS_IMPORTED = "CredentialsImported";
         public const string PRODUCTS_IMPORTED = "ProductsImported";
     }
