@@ -1,4 +1,5 @@
-﻿using CryptoTaxV3.Domain.AppSettings.DAL;
+﻿using System.Collections.Generic;
+using CryptoTaxV3.Domain.AppSettings.DAL;
 using CryptoTaxV3.Domain.Infrastructure;
 
 namespace CryptoTaxV3.Domain.AppSettings
@@ -23,5 +24,7 @@ namespace CryptoTaxV3.Domain.AppSettings
             Preconditions.ThrowValidationIfNullOrWhiteSpace(key, "AppSetting Key required");
             _repo.AddOrUpdate(key.Trim(), value);
         }
+
+        public IEnumerable<KeyValuePair<string, string>> Get() => _repo.Get();
     }
 }

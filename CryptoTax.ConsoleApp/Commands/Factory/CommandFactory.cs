@@ -24,6 +24,7 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
         public ICommand GetCommand(string arg) => arg.ToLower() switch
         {
             "accounts" => GetAccountCommand(),
+            "settings" => GetAppSettingsCommand(),
             "coins" => GetCoinCommand(),
             "coinlookups" => GetCoinLookupCommand(),
             "credentials" => GetCredentialCommand(),
@@ -44,6 +45,12 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
             var sources = _serviceProvider.GetRequiredService<ISources>();
             var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
             return new AccountCommand(accounts, sources, appSettings);
+        }
+
+        public AppSettingCommand GetAppSettingsCommand()
+        {
+            var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
+            return new AppSettingCommand(appSettings);
         }
 
         private CoinCommand GetCoinCommand()

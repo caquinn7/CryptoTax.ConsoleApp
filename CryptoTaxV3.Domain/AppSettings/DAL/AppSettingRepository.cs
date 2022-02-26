@@ -1,4 +1,5 @@
-﻿using CryptoTaxV3.Domain.Infrastructure.DataAccess;
+﻿using System.Collections.Generic;
+using CryptoTaxV3.Domain.Infrastructure.DataAccess;
 
 namespace CryptoTaxV3.Domain.AppSettings.DAL
 {
@@ -19,5 +20,8 @@ namespace CryptoTaxV3.Domain.AppSettings.DAL
             SelectSingle<T>(
                 "select value from app_settings where key = @key",
                 new { key });
+
+        public IEnumerable<KeyValuePair<string, string>> Get() =>
+            Select<KeyValuePair<string, string>>("select key, value from app_settings order by key");
     }
 }
