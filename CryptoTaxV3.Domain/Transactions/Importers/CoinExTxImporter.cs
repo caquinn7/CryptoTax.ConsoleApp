@@ -28,13 +28,13 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
             var result = new ImportResult { Source = TxSource.CoinEx };
             try
             {
+                var dealsTask = _coinExClient.GetDealsAsync();
                 var markets = _markets.GetActive(TxSource.CoinEx);
-                var dealLists = await Task.WhenAll(markets.Select(m => _coinExClient.GetDealsAsync($"{m.Base}{m.Quote}")));
-                result.Transactions = dealLists
-                    .SelectMany(ds => ds)
+
+                result.Transactions = (await dealsTask)
                     .Select(d => d.ToTransactions(GetMarket(d.Market)))
-                    .SelectMany(ts => new Transaction[] { ts.Item1, ts.Item2, ts.Item3 })
-                    .Where(t => t != null);
+                    .SelectMany(ts => (new Transaction[] { ts.Item1, ts.Item2, ts.Item3 }))
+                    .Where(t => t is not null);
 
                 Market GetMarket(string symbol) => markets.Single(m => symbol == $"{m.Base}{m.Quote}");
             }

@@ -6,7 +6,7 @@ namespace CryptoTaxV3.Domain.Integrations.CoinEx
 {
     public interface ICoinExClient
     {
-        Task<IEnumerable<CoinExDealDto>> GetDealsAsync(string market);
+        Task<IEnumerable<CoinExDealDto>> GetDealsAsync();
         Task<IEnumerable<MarketDto>> GetMarketsAsync();
     }
 }

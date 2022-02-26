@@ -24,15 +24,14 @@ namespace CryptoTaxV3.Domain.Integrations.CoinEx
             _creds = credentials;
         }
 
-        public async Task<IEnumerable<CoinExDealDto>> GetDealsAsync(string market)
+        public async Task<IEnumerable<CoinExDealDto>> GetDealsAsync()
         {
             string accessId = _creds.GetCredentialValue(TxSource.CoinEx, "AccessId");
             string apiSecret = _creds.GetCredentialValue(TxSource.CoinEx, "ApiSecret");
 
             var queryParams = new QueryParams
             {
-                access_id = accessId,
-                market = market
+                access_id = accessId
             };
 
             var deals = new List<CoinExDealDto>();
@@ -48,11 +47,14 @@ namespace CryptoTaxV3.Domain.Integrations.CoinEx
                     .WithHeader("Authorization", GetRequestSignature(queryParams, apiSecret))
                     .GetJsonAsync<CoinExResponseDto<CoinExDealDto>>();
 
-                if (response.Code == 0)
+                if (response.Code != 0)
                 {
-                    if (response.Data != null) deals.AddRange(response.Data.Data);
+                    throw new Exception($"CoinEx returned error code {response.Code}");
                 }
-                else throw new Exception($"CoinEx returned error code {response.Code}");
+                if (response.Data != null)
+                {
+                    deals.AddRange(response.Data.Data);
+                }
 
                 queryParams.page += 1;
                 hasNext = response.Data.HasNext;
