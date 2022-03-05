@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Integrations.Coinbase;
+using CryptoTaxV3.Domain.Products.DAL;
 
 namespace CryptoTaxV3.Domain.Products.Importers
 {
@@ -13,6 +14,6 @@ namespace CryptoTaxV3.Domain.Products.Importers
             _coinbaseProClient = coinbaseProClient;
         }
 
-        public Task<IEnumerable<MarketDto>> GetMarketsAsync() => _coinbaseProClient.GetMarketsAsync();
+        public Task<IEnumerable<Market>> GetMarketsAsync() => _coinbaseProClient.GetMarketsAsync();
     }
 }

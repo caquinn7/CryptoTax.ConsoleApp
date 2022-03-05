@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Credentials;
-using CryptoTaxV3.Domain.Products;
+using CryptoTaxV3.Domain.Products.DAL;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Newtonsoft.Json;
@@ -64,19 +64,19 @@ namespace CryptoTaxV3.Domain.Integrations.CoinEx
             return deals;
         }
 
-        public async Task<IEnumerable<MarketDto>> GetMarketsAsync()
+        public async Task<IEnumerable<Market>> GetMarketsAsync()
         {
             string response = await _client
                 .Request("/v1/market/info")
                 .GetStringAsync();
 
             var data = (JObject)JObject.Parse(response)["data"];
-            var markets = new List<MarketDto>();
+            var markets = new List<Market>();
             foreach (var kvp in data)
             {
-                markets.Add(new MarketDto
+                markets.Add(new Market
                 {
-                    Source = TxSource.CoinEx,
+                    Source = TxSource.CoinEx.FastToString(),
                     Base = kvp.Value["trading_name"].ToString(),
                     Quote = kvp.Value["pricing_name"].ToString()
                 });

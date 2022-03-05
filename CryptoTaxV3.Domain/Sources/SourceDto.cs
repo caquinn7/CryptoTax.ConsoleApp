@@ -2,8 +2,8 @@
 {
     public class SourceDto
     {
-        public string Name { get; set; }
-        public string ProductType { get; set; }
-        public bool IsActive { get; set; }
+        public TxSource Name { get; init; }
+        public string ProductType { get; init; }
+        public bool IsActive { get; init; }
     }
 }

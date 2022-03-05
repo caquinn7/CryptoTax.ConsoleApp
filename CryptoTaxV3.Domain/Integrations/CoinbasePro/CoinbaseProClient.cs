@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Credentials;
 using CryptoTaxV3.Domain.Integrations.CoinbasePro;
-using CryptoTaxV3.Domain.Products;
+using CryptoTaxV3.Domain.Products.DAL;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 
@@ -65,16 +65,16 @@ namespace CryptoTaxV3.Domain.Integrations.Coinbase
             return fills;
         }
 
-        public async Task<IEnumerable<MarketDto>> GetMarketsAsync()
+        public async Task<IEnumerable<Market>> GetMarketsAsync()
         {
             IEnumerable<dynamic> response = await _client
                 .WithHeader("User-Agent", "CryptoTaxCQ/1.0")
                 .Request("/products")
                 .GetJsonAsync<dynamic>();
 
-            return response.Select(m => new MarketDto
+            return response.Select(m => new Market
             {
-                Source = TxSource.CoinbasePro,
+                Source = TxSource.CoinbasePro.FastToString(),
                 Base = m.base_currency,
                 Quote = m.quote_currency
             });

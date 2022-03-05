@@ -42,9 +42,8 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
         private AccountCommand GetAccountCommand()
         {
             var accounts = _serviceProvider.GetRequiredService<IAccounts>();
-            var sources = _serviceProvider.GetRequiredService<ISources>();
             var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
-            return new AccountCommand(accounts, sources, appSettings);
+            return new AccountCommand(accounts, appSettings);
         }
 
         public AppSettingCommand GetAppSettingsCommand()
@@ -89,9 +88,8 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
         private MarketCommand GetMarketCommand()
         {
             var markets = _serviceProvider.GetRequiredService<IMarkets>();
-            var sources = _serviceProvider.GetRequiredService<ISources>();
             var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
-            return new MarketCommand(markets, sources, appSettings);
+            return new MarketCommand(markets, appSettings);
         }
 
         private ProductCommand GetProductCommand()

@@ -6,8 +6,7 @@ namespace CryptoTaxV3.Domain.Products
     public interface IAccounts
     {
         int ActivateFromCsv(string filePath);
-        int Add(IEnumerable<AccountDto> accountDtos);
-        IEnumerable<AccountDto> Get(TxSource txSource);
-        IEnumerable<Account> GetActive(TxSource txSource);
+        int Add(IEnumerable<Account> accounts);
+        IEnumerable<Account> GetActive(TxSource? source = null);
     }
 }

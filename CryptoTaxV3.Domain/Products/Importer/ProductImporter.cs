@@ -22,7 +22,7 @@ namespace CryptoTaxV3.Domain.Products.Importers
             _sources = sources;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProductsAsync(TxSource txSource)
+        public async Task<IEnumerable<Product>> GetProductsAsync(TxSource txSource)
         {
             Source source = _sources.Get(txSource);
             if (source.ProductType == "Market")
@@ -34,7 +34,7 @@ namespace CryptoTaxV3.Domain.Products.Importers
             {
                 return await _acctImporter.GetAccountsAsync();
             }
-            else return Enumerable.Empty<ProductDto>();
+            else return Enumerable.Empty<Product>();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
         {
             if (args.Length == 1)
             {
-                var sources = _sources.Get();
+                var sources = _sources.GetDtos();
                 Output.WriteTable(sources);
                 return;
             }

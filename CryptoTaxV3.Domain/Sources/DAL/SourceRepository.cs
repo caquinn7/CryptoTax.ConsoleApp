@@ -9,7 +9,7 @@ namespace CryptoTaxV3.Domain.Sources.DAL
         {
         }
 
-        public IEnumerable<SourceDto> Get() =>
+        public IEnumerable<SourceDto> GetDtos() =>
             Select<SourceDto>(@"
                 select
                     name,
@@ -27,6 +27,16 @@ namespace CryptoTaxV3.Domain.Sources.DAL
                     is_active IsActive
                 from sources
                 where name = @name", new { name });
+
+        public IEnumerable<Source> Get() =>
+            Select<Source>(@"
+                select
+                    name,
+                    product_type ProductType,
+                    market_hyphenated MarketHyphenated,
+                    is_active IsActive
+                from sources
+                order by name");
 
         public IEnumerable<Source> GetActive() =>
             Select<Source>(@"

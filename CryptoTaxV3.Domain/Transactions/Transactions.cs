@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Exceptions;
@@ -165,7 +164,7 @@ namespace CryptoTaxV3.Domain.Transactions
 
     internal class TransactionMap : ClassMap<TransactionDto>
     {
-        private readonly EnumConverter _enumConverter = new(typeof(TxType));
+        private static readonly EnumConverter _enumConverter = new(typeof(TxType));
         public TransactionMap()
         {
             Map(t => t.Asset).Index(0);

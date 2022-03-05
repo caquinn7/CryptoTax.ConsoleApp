@@ -32,6 +32,7 @@ namespace CryptoTax.ConsoleApp.Database
                 "batches",
                 "coin_lookup",
                 "coins",
+                "product_ids",
                 "accounts",
                 "markets",
                 "products",

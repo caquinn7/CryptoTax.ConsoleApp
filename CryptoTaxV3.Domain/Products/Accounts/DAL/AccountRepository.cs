@@ -18,19 +18,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
                 on conflict (source, asset) do update
                 set external_id = excluded.external_id", accounts);
 
-        public IEnumerable<AccountDto> Get(string source) =>
-            Select<AccountDto>(@"
-                select 
-	                id,
-                    source,
-                    asset,
-                    external_id ExternalId,
-                    is_active IsActive
-                from accounts
-                where source = @source
-                order by asset", new { source });
-
-        public IEnumerable<Account> GetActive(string source) =>
+        public IEnumerable<Account> GetActive(string source = null) =>
             Select<Account>(@"
                 select 
 	                id,
@@ -39,7 +27,9 @@ namespace CryptoTaxV3.Domain.Products.DAL
                     external_id ExternalId,
                     is_active IsActive
                 from accounts
-                where source = @source and is_active = 1
+                where
+                    (@source is null or source = @source)
+                    and is_active = 1
                 order by asset", new { source });
 
         public int Activate(IEnumerable<Account> accounts)

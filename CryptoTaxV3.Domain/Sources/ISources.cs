@@ -5,8 +5,9 @@ namespace CryptoTaxV3.Domain.Sources
 {
     public interface ISources
     {
-        IEnumerable<SourceDto> Get();
+        IEnumerable<SourceDto> GetDtos();
         Source Get(TxSource source);
         IEnumerable<Source> GetActive();
+        IEnumerable<Source> Get();
     }
 }

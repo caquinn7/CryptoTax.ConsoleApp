@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Integrations.CoinEx;
@@ -31,7 +32,8 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
                 var dealsTask = _coinExClient.GetDealsAsync();
                 var markets = _markets.GetActive(TxSource.CoinEx);
 
-                result.Transactions = (await dealsTask)
+                IEnumerable<CoinExDealDto> deals = await dealsTask;
+                result.Transactions = deals
                     .Select(d => d.ToTransactions(GetMarket(d.Market)))
                     .SelectMany(ts => (new Transaction[] { ts.Item1, ts.Item2, ts.Item3 }))
                     .Where(t => t is not null);

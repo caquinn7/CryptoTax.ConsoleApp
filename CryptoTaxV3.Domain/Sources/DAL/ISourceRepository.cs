@@ -5,7 +5,8 @@ namespace CryptoTaxV3.Domain.Sources.DAL
     public interface ISourceRepository
     {
         IEnumerable<Source> GetActive();
-        IEnumerable<SourceDto> Get();
+        IEnumerable<SourceDto> GetDtos();
         Source Get(string name);
+        IEnumerable<Source> Get();
     }
 }

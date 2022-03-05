@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Integrations.Binance;
+using CryptoTaxV3.Domain.Products.DAL;
 
 namespace CryptoTaxV3.Domain.Products.Importers.Markets
 {
@@ -15,6 +16,6 @@ namespace CryptoTaxV3.Domain.Products.Importers.Markets
             _isUS = isUS;
         }
 
-        public Task<IEnumerable<MarketDto>> GetMarketsAsync() => _binanceClient.GetMarketsAsync(_isUS);
+        public Task<IEnumerable<Market>> GetMarketsAsync() => _binanceClient.GetMarketsAsync(_isUS);
     }
 }

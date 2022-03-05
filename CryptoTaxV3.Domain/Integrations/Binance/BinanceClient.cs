@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Credentials;
-using CryptoTaxV3.Domain.Products;
+using CryptoTaxV3.Domain.Products.DAL;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Newtonsoft.Json.Linq;
@@ -42,15 +42,15 @@ namespace CryptoTaxV3.Domain.Integrations.Binance
                 .GetJsonAsync<IEnumerable<BinanceOrderDto>>();
         }
 
-        public async Task<IEnumerable<MarketDto>> GetMarketsAsync(bool isUS)
+        public async Task<IEnumerable<Market>> GetMarketsAsync(bool isUS)
         {
             string response = await GetClient(isUS)
                 .Request("/api/v3/exchangeInfo")
                 .GetStringAsync();
 
-            return JObject.Parse(response)["symbols"].Select(s => new MarketDto
+            return JObject.Parse(response)["symbols"].Select(s => new Market
             {
-                Source = isUS ? TxSource.BinanceUS : TxSource.Binance,
+                Source = isUS ? TxSource.BinanceUS.FastToString() : TxSource.Binance.FastToString(),
                 Base = s["baseAsset"].ToString(),
                 Quote = s["quoteAsset"].ToString()
             }).ToList();

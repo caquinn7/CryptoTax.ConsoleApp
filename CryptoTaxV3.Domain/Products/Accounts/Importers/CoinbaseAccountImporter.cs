@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoTaxV3.Domain.Integrations.Coinbase;
+using CryptoTaxV3.Domain.Products.DAL;
 
 namespace CryptoTaxV3.Domain.Products.Importers
 {
@@ -14,12 +15,12 @@ namespace CryptoTaxV3.Domain.Products.Importers
             _coinbaseClient = coinbaseClient;
         }
 
-        public async Task<IEnumerable<AccountDto>> GetAccountsAsync()
+        public async Task<IEnumerable<Account>> GetAccountsAsync()
         {
             var accountDtos = await _coinbaseClient.GetAccountsAsync();
-            return accountDtos.Select(a => new AccountDto
+            return accountDtos.Select(a => new Account
             {
-                Source = TxSource.Coinbase,
+                Source = TxSource.Coinbase.FastToString(),
                 Asset = a.Currency.Code,
                 ExternalId = a.Id
             });

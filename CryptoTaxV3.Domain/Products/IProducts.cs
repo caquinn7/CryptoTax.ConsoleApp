@@ -5,7 +5,7 @@ namespace CryptoTaxV3.Domain.Products
 {
     public interface IProducts
     {
-        IEnumerable<ProductDto> Get(TxSource txSource);
+        IEnumerable<ProductDto> GetActive();
         Task<int> ImportFromSourcesAsync();
     }
 }

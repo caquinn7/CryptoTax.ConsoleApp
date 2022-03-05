@@ -21,25 +21,14 @@ namespace CryptoTaxV3.Domain.Products
             _csvReader = csvReader;
         }
 
-        public IEnumerable<MarketDto> Get(TxSource source) => _repo.Get(source.ToString());
+        public IEnumerable<Market> GetActive(TxSource? source = null) => _repo.GetActive(source?.ToString());
 
-        public IEnumerable<Market> GetActive(TxSource source) => _repo.GetActive(source.ToString());
-
-        public int Add(IEnumerable<MarketDto> marketDtos)
+        public int Add(IEnumerable<Market> markets)
         {
-            var markets = new List<Market>();
-            foreach (var m in marketDtos)
+            foreach (var m in markets)
             {
                 Preconditions.ThrowValidationIfNullOrWhiteSpace(m.Base, "Market Base Asset required");
                 Preconditions.ThrowValidationIfNullOrWhiteSpace(m.Quote, "Market Quote Asset required");
-
-                markets.Add(new Market
-                {
-                    Source = m.Source.FastToString(),
-                    Base = m.Base,
-                    Quote = m.Quote,
-                    IsActive = false
-                });
             }
             return _repo.Insert(markets);
         }
@@ -53,7 +42,6 @@ namespace CryptoTaxV3.Domain.Products
                 string msg = $"Market not found: Source: {invalidMkt.Source}, Base: {invalidMkt.Base}, Quote: {invalidMkt.Quote}";
                 throw new ValidationException(msg);
             }
-
             return _repo.Activate(markets);
         }
     }

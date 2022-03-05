@@ -12,9 +12,11 @@ namespace CryptoTaxV3.Domain.Sources
             _repo = sourceRepository;
         }
 
-        public IEnumerable<SourceDto> Get() => _repo.Get();
+        public IEnumerable<SourceDto> GetDtos() => _repo.GetDtos();
 
         public Source Get(TxSource source) => _repo.Get(source.ToString());
+
+        public IEnumerable<Source> Get() => _repo.Get();
 
         public IEnumerable<Source> GetActive() => _repo.GetActive();
     }

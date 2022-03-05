@@ -21,25 +21,14 @@ namespace CryptoTaxV3.Domain.Products
             _csvReader = csvReader;
         }
 
-        public IEnumerable<AccountDto> Get(TxSource source) => _repo.Get(source.ToString());
+        public IEnumerable<Account> GetActive(TxSource? source = null) => _repo.GetActive(source?.ToString());
 
-        public IEnumerable<Account> GetActive(TxSource source) => _repo.GetActive(source.ToString());
-
-        public int Add(IEnumerable<AccountDto> accountDtos)
+        public int Add(IEnumerable<Account> accounts)
         {
-            var accounts = new List<Account>();
-            foreach (var a in accountDtos)
+            foreach (var a in accounts)
             {
                 Preconditions.ThrowValidationIfNullOrWhiteSpace(a.Asset, "Account Asset required");
                 Preconditions.ThrowValidationIfNullOrWhiteSpace(a.ExternalId, "Account External Id required");
-
-                accounts.Add(new Account
-                {
-                    Source = a.Source.FastToString(),
-                    Asset = a.Asset,
-                    ExternalId = a.ExternalId,
-                    IsActive = false
-                });
             }
             return _repo.AddOrUpdate(accounts);
         }
@@ -53,7 +42,6 @@ namespace CryptoTaxV3.Domain.Products
                 string msg = $"Account not found: Source: {invalidAcct.Source}, Asset: {invalidAcct.Asset}";
                 throw new ValidationException(msg);
             }
-
             return _repo.Activate(accounts);
         }
     }

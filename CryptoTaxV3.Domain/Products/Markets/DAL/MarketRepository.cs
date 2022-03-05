@@ -16,24 +16,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
                 insert or ignore into markets (source, base, quote, is_active)
                 values (@Source, @Base, @Quote, @IsActive)", markets);
 
-        public IEnumerable<MarketDto> Get(string source) =>
-            Select<MarketDto>(@"
-                select 
-	                m.id,
-	                m.source,
-	                m.base,
-	                m.quote,
-	                m.is_active IsActive,
-                    case s.market_hyphenated
-                        when 1 then m.base || '-' || m.quote
-                        else m.base || m.quote
-                    end Name
-                from markets m
-                inner join sources s on m.source = s.name
-                where m.source = @source
-                order by m.base, m.quote", new { source });
-
-        public IEnumerable<Market> GetActive(string source) =>
+        public IEnumerable<Market> GetActive(string source = null) =>
             Select<Market>(@"
                 select 
 	                id,
@@ -42,7 +25,9 @@ namespace CryptoTaxV3.Domain.Products.DAL
 	                quote,
 	                is_active IsActive
                 from markets
-                where source = @source and is_active = 1
+                where
+                    (@source is null or source = @source)
+                    and is_active = 1
                 order by base, quote", new { source });
 
         public int Activate(IEnumerable<Market> markets)

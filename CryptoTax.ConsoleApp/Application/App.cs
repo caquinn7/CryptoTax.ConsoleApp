@@ -61,7 +61,7 @@ namespace CryptoTax.ConsoleApp.Application
                     if (!productsImported)
                     {
                         Output.WriteLine("Importing products...");
-                        ExecuteCommand("products");
+                        ExecuteCommand("products import");
                         SetAppSetting(AppSettingKey.PRODUCTS_IMPORTED);
                     }
 
