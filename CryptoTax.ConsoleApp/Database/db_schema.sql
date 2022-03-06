@@ -97,8 +97,6 @@ CREATE TABLE IF NOT EXISTS "transactions" (
 	"batch_id"				INTEGER,
 	FOREIGN KEY("type") REFERENCES "transaction_types"("name")
 		ON DELETE RESTRICT ON UPDATE RESTRICT,
-	--FOREIGN KEY("source") REFERENCES "sources"("name")
-		--ON DELETE RESTRICT ON UPDATE RESTRICT, 
 	FOREIGN KEY("batch_id") REFERENCES "batches"("id")
 		ON DELETE RESTRICT ON UPDATE RESTRICT
 );

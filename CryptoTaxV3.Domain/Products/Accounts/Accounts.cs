@@ -21,7 +21,8 @@ namespace CryptoTaxV3.Domain.Products
             _csvReader = csvReader;
         }
 
-        public IEnumerable<Account> GetActive(TxSource? source = null) => _repo.GetActive(source?.ToString());
+        public IEnumerable<Account> GetActive(TxSource? source = null) =>
+            _repo.GetActive(source?.ToString());
 
         public int Add(IEnumerable<Account> accounts)
         {

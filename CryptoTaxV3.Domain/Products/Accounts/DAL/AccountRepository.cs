@@ -11,12 +11,21 @@ namespace CryptoTaxV3.Domain.Products.DAL
         {
         }
 
-        public int AddOrUpdate(IEnumerable<Account> accounts) =>
+        public int AddOrUpdate(IEnumerable<Account> accounts)
+        {
+            int prevCount = Count();
+
             ExecuteTransaction(@"
                 insert into accounts (source, asset, external_id, is_active)
                 values (@Source, @Asset, @ExternalId, @IsActive)
                 on conflict (source, asset) do update
                 set external_id = excluded.external_id", accounts);
+
+            int newCount = Count();
+            return newCount - prevCount;
+
+            int Count() => SelectSingle<int>("select count(*) from accounts");
+        }
 
         public IEnumerable<Account> GetActive(string source = null) =>
             Select<Account>(@"
@@ -30,7 +39,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
                 where
                     (@source is null or source = @source)
                     and is_active = 1
-                order by asset", new { source });
+                order by source, asset", new { source });
 
         public int Activate(IEnumerable<Account> accounts)
         {
