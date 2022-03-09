@@ -23,7 +23,6 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
 
         public ICommand GetCommand(string arg) => arg.ToLower() switch
         {
-            "accounts" => GetAccountCommand(),
             "settings" => GetAppSettingsCommand(),
             "coins" => GetCoinCommand(),
             "coinlookups" => GetCoinLookupCommand(),
@@ -31,20 +30,12 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
             "creds" => GetCredentialCommand(),
             "formentries" => GetFormEntriesCommand(),
             "logs" => GetLogCommand(),
-            "markets" => GetMarketCommand(),
             "products" => GetProductCommand(),
             "sources" => GetSourceCommand(),
             "transactions" => GetTransactionCommand(),
             "txs" => GetTransactionCommand(),
             _ => throw new NotImplementedException($"Invalid command: {arg}")
         };
-
-        private AccountCommand GetAccountCommand()
-        {
-            var accounts = _serviceProvider.GetRequiredService<IAccounts>();
-            var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
-            return new AccountCommand(accounts, appSettings);
-        }
 
         public AppSettingCommand GetAppSettingsCommand()
         {
@@ -85,17 +76,11 @@ namespace CryptoTax.ConsoleApp.Commands.Factory
             return new LogCommand(appSettings);
         }
 
-        private MarketCommand GetMarketCommand()
-        {
-            var markets = _serviceProvider.GetRequiredService<IMarkets>();
-            var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
-            return new MarketCommand(markets, appSettings);
-        }
-
         private ProductCommand GetProductCommand()
         {
             var products = _serviceProvider.GetRequiredService<IProducts>();
-            return new ProductCommand(products);
+            var appSettings = _serviceProvider.GetRequiredService<IAppSettings>();
+            return new ProductCommand(products, appSettings);
         }
 
         private SourceCommand GetSourceCommand()

@@ -2,7 +2,6 @@
 using System.Linq;
 using CryptoTaxV3.Domain.Exceptions;
 using CryptoTaxV3.Domain.Infrastructure;
-using CryptoTaxV3.Domain.Infrastructure.Csv;
 using CryptoTaxV3.Domain.Products.DAL;
 using CsvHelper.Configuration;
 
@@ -11,14 +10,10 @@ namespace CryptoTaxV3.Domain.Products
     public class Accounts : IAccounts
     {
         private readonly IAccountRepository _repo;
-        private readonly ICsvReaderWrapper _csvReader;
 
-        public Accounts(
-            IAccountRepository accountRepository,
-            ICsvReaderWrapper csvReader)
+        public Accounts(IAccountRepository accountRepository)
         {
             _repo = accountRepository;
-            _csvReader = csvReader;
         }
 
         public IEnumerable<Account> GetActive(TxSource? source = null) =>
@@ -34,9 +29,8 @@ namespace CryptoTaxV3.Domain.Products
             return _repo.AddOrUpdate(accounts);
         }
 
-        public int ActivateFromCsv(string filePath)
+        public int Activate(IEnumerable<Account> accounts)
         {
-            var accounts = _csvReader.GetRecords(filePath, new AccountMap());
             var invalidAcct = accounts.FirstOrDefault(a => !_repo.Exists(a));
             if (invalidAcct != null)
             {

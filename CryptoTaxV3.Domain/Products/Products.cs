@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CryptoTaxV3.Domain.Exceptions;
+using CryptoTaxV3.Domain.Infrastructure.Csv;
 using CryptoTaxV3.Domain.Products.DAL;
 using CryptoTaxV3.Domain.Products.Importers;
 using CryptoTaxV3.Domain.Sources;
@@ -17,24 +19,29 @@ namespace CryptoTaxV3.Domain.Products
         private readonly IMarkets _markets;
         private readonly ISources _sources;
         private readonly IProductImporter _importer;
+        private readonly ICsvReaderWrapper _csvReader;
 
         public Products(
             IAccounts accounts,
             IMarkets markets,
             ISources sources,
-            IProductImporter productImporter)
+            IProductImporter productImporter,
+            ICsvReaderWrapper csvReader)
         {
             _accounts = accounts;
             _markets = markets;
             _sources = sources;
             _importer = productImporter;
+            _csvReader = csvReader;
         }
 
         public IEnumerable<ProductDto> GetActive()
         {
             var sources = _sources.GetActive();
-            return GetAccounts().Concat(GetMarkets())
-                .OrderBy(p => p.Source.ToString());
+            return GetAccounts()
+                .Concat(GetMarkets())
+                .OrderBy(p => p.Source.ToString())
+                .ThenBy(p => p.Name);
 
             List<ProductDto> GetAccounts()
             {
@@ -108,17 +115,59 @@ namespace CryptoTaxV3.Domain.Products
 
         public int ActivateFromCsv(string filePath)
         {
-            throw new NotImplementedException();
+            var products = _csvReader.GetRecords(filePath, new ProductMap());
+            var sources = _sources.Get();
+
+            var accounts = new List<Account>();
+            var markets = new List<Market>();
+
+            foreach (ProductCsvDto product in products)
+            {
+                Source source = sources.SingleOrDefault(s => s.Name == product.Source.FastToString());
+                if (source is null)
+                {
+                    throw new ValidationException($"Source not found: {product.Source}");
+                }
+                if (source.ProductType == ProductType.Account.FastToString())
+                {
+                    accounts.Add(new Account
+                    {
+                        Source = source.Name,
+                        Asset = product.Base
+                    });
+                }
+                else if (source.ProductType == ProductType.Market.FastToString())
+                {
+                    markets.Add(new Market
+                    {
+                        Source = source.Name,
+                        Base = product.Base,
+                        Quote = product.Quote
+                    });
+                }
+            }
+
+            int count = _accounts.Activate(accounts);
+            count += _markets.Activate(markets);
+            return count;
         }
     }
 
-    internal class ProductMap : ClassMap<ProductDto>
+    internal class ProductMap : ClassMap<ProductCsvDto>
     {
         private static readonly EnumConverter _enumConverter = new(typeof(TxSource));
         public ProductMap()
         {
             Map(p => p.Source).TypeConverter(_enumConverter).Index(0);
-            Map(p => p.Name).Index(1);
+            Map(p => p.Base).Index(1);
+            Map(p => p.Quote).Index(2);
         }
+    }
+
+    internal class ProductCsvDto
+    {
+        public TxSource Source { get; init; }
+        public string Base { get; init; }
+        public string Quote { get; init; }
     }
 }

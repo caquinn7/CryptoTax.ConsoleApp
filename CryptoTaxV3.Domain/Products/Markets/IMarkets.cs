@@ -5,7 +5,7 @@ namespace CryptoTaxV3.Domain.Products
 {
     public interface IMarkets
     {
-        int ActivateFromCsv(string filePath);
+        int Activate(IEnumerable<Market> markets);
         int Add(IEnumerable<Market> markets);
         IEnumerable<Market> GetActive(TxSource? source = null);
     }

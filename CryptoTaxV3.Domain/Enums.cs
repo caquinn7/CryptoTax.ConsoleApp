@@ -39,6 +39,16 @@ namespace CryptoTaxV3.Domain
         TradingFee
     }
 
+    static class ProductTypeExtenstions
+    {
+        public static string FastToString(this ProductType productType) => productType switch
+        {
+            ProductType.Account => nameof(ProductType.Account),
+            ProductType.Market => nameof(ProductType.Market),
+            _ => throw new ArgumentOutOfRangeException(nameof(productType), productType, null)
+        };
+    }
+
     static class TxSourceExtensions
     {
         public static string FastToString(this TxSource source) => source switch
