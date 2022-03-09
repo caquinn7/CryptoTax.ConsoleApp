@@ -16,8 +16,8 @@ namespace CryptoTaxV3.Domain.Products
             _repo = accountRepository;
         }
 
-        public IEnumerable<Account> GetActive(TxSource? source = null) =>
-            _repo.GetActive(source?.ToString());
+        public IEnumerable<Account> GetActive(TxSource source) =>
+            _repo.GetActive(source.ToString());
 
         public int Add(IEnumerable<Account> accounts)
         {

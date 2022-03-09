@@ -7,6 +7,6 @@ namespace CryptoTaxV3.Domain.Products
     {
         int Activate(IEnumerable<Account> accounts);
         int Add(IEnumerable<Account> accounts);
-        IEnumerable<Account> GetActive(TxSource? source = null);
+        IEnumerable<Account> GetActive(TxSource source);
     }
 }

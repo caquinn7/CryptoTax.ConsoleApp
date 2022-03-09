@@ -6,7 +6,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
     {
         int Activate(IEnumerable<Account> accounts);
         bool Exists(Account account);
-        IEnumerable<Account> GetActive(string source = null);
+        IEnumerable<Account> GetActive(string source);
         int AddOrUpdate(IEnumerable<Account> markets);
     }
 }

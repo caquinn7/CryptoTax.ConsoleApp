@@ -27,7 +27,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
             int Count() => SelectSingle<int>("select count(*) from accounts");
         }
 
-        public IEnumerable<Account> GetActive(string source = null) =>
+        public IEnumerable<Account> GetActive(string source) =>
             Select<Account>(@"
                 select 
 	                id,
@@ -36,9 +36,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
                     external_id ExternalId,
                     is_active IsActive
                 from accounts
-                where
-                    (@source is null or source = @source)
-                    and is_active = 1
+                where source = @source and is_active = 1
                 order by source, asset", new { source });
 
         public int Activate(IEnumerable<Account> accounts)

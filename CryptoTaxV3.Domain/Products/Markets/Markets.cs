@@ -16,8 +16,8 @@ namespace CryptoTaxV3.Domain.Products
             _repo = marketRepo;
         }
 
-        public IEnumerable<Market> GetActive(TxSource? source = null) =>
-            _repo.GetActive(source?.ToString());
+        public IEnumerable<Market> GetActive(TxSource source) =>
+            _repo.GetActive(source.ToString());
 
         public int Add(IEnumerable<Market> markets)
         {

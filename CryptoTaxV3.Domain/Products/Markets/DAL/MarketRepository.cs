@@ -16,7 +16,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
                 insert or ignore into markets (source, base, quote, is_active)
                 values (@Source, @Base, @Quote, @IsActive)", markets);
 
-        public IEnumerable<Market> GetActive(string source = null) =>
+        public IEnumerable<Market> GetActive(string source) =>
             Select<Market>(@"
                 select 
 	                id,
@@ -25,9 +25,7 @@ namespace CryptoTaxV3.Domain.Products.DAL
 	                quote,
 	                is_active IsActive
                 from markets
-                where
-                    (@source is null or source = @source)
-                    and is_active = 1
+                where source = @source and is_active = 1
                 order by base, quote", new { source });
 
         public int Activate(IEnumerable<Market> markets)
