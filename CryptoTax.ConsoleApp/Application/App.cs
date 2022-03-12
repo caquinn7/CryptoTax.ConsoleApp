@@ -65,6 +65,15 @@ namespace CryptoTax.ConsoleApp.Application
                         SetAppSetting(AppSettingKey.PRODUCTS_IMPORTED);
                     }
 
+                    bool productsActivated = _appSettings.Get<bool>(AppSettingKey.PRODUCTS_ACTIVATED);
+                    if (!productsActivated)
+                    {
+                        Output.Write("Enter path for active products file: ");
+                        string path = Console.ReadLine().Trim();
+                        ExecuteCommand($"products activate -f {path}");
+                        SetAppSetting(AppSettingKey.PRODUCTS_ACTIVATED);
+                    }
+
                     setupComplete = true;
                 }
                 catch (Exception ex)

@@ -13,6 +13,7 @@
         public const string COINS_IMPORTED = "CoinsImported";
         public const string COINLOOKUPS_IMPORTED = "CoinLookupsImported";
         public const string CREDS_IMPORTED = "CredentialsImported";
+        public const string PRODUCTS_ACTIVATED = "ProductsActivated";
         public const string PRODUCTS_IMPORTED = "ProductsImported";
     }
 }
