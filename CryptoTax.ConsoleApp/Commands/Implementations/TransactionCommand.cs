@@ -27,7 +27,7 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
                 case "export":
                     ExportToCsv(args);
                     break;
-                // txs import (import from api integrations)
+                // txs import -s (import from api sources)
                 // txs import -f <path to csv file with txs>
                 case "import":
                     Import(args);
