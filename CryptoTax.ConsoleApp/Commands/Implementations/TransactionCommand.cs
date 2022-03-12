@@ -57,9 +57,15 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
 
         private void Import(CommandArgs args)
         {
-            string filePath = GetFilePath(args, AppSettingKey.TXS_INFILE);
-            if (filePath is null) ImportFromIntegrations();
-            else ImportFromCsv(filePath);
+            switch (args[2])
+            {
+                case "-s":
+                    ImportFromIntegrations();
+                    break;
+                case "-f":
+                    ImportFromCsv();
+                    break;
+            }
 
             void ImportFromIntegrations()
             {
@@ -69,8 +75,9 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
                 Output.WriteLine("\n" + importCount + " new transactions imported");
             }
 
-            void ImportFromCsv(string filePath)
+            void ImportFromCsv()
             {
+                string filePath = GetFilePath(args, AppSettingKey.TXS_INFILE);
                 int count = _transactions.ImportFromCsvAsync(filePath).GetAwaiter().GetResult();
                 Output.WriteLine(count + " transactions imported");
             }

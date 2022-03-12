@@ -12,6 +12,10 @@ namespace CryptoTax.ConsoleApp.Commands
             _appSettings = appSettings;
         }
 
+        /// <summary>
+        /// Checks args, then AppSettings for the filepath. Returns null if not found.
+        /// If the filepath is found in args, then the AppSetting is updated.
+        /// </summary>
         protected string GetFilePath(CommandArgs args, string appSettingKey)
         {
             string filePath = args.GetArg("-f");
