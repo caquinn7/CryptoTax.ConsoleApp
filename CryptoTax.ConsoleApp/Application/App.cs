@@ -31,49 +31,11 @@ namespace CryptoTax.ConsoleApp.Application
             {
                 try
                 {
-                    bool coinsImported = _appSettings.Get<bool>(AppSettingKey.COINS_IMPORTED);
-                    if (!coinsImported)
-                    {
-                        Output.WriteLine("Importing coins...");
-                        ExecuteCommand("coins import");
-                        SetAppSetting(AppSettingKey.COINS_IMPORTED);
-                    }
-
-                    bool coinLookupsImported = _appSettings.Get<bool>(AppSettingKey.COINLOOKUPS_IMPORTED);
-                    if (!coinLookupsImported)
-                    {
-                        Output.Write("Enter path for coin lookups file: ");
-                        string path = Console.ReadLine().Trim();
-                        ExecuteCommand($"coinlookups import -f {path}");
-                        SetAppSetting(AppSettingKey.COINLOOKUPS_IMPORTED);
-                    }
-
-                    bool credsImported = _appSettings.Get<bool>(AppSettingKey.CREDS_IMPORTED);
-                    if (!credsImported)
-                    {
-                        Output.Write("Enter path for credentials file: ");
-                        string path = Console.ReadLine().Trim();
-                        ExecuteCommand($"credentials import -f {path}");
-                        SetAppSetting(AppSettingKey.CREDS_IMPORTED);
-                    }
-
-                    bool productsImported = _appSettings.Get<bool>(AppSettingKey.PRODUCTS_IMPORTED);
-                    if (!productsImported)
-                    {
-                        Output.WriteLine("Importing products...");
-                        ExecuteCommand("products import");
-                        SetAppSetting(AppSettingKey.PRODUCTS_IMPORTED);
-                    }
-
-                    bool productsActivated = _appSettings.Get<bool>(AppSettingKey.PRODUCTS_ACTIVATED);
-                    if (!productsActivated)
-                    {
-                        Output.Write("Enter path for active products file: ");
-                        string path = Console.ReadLine().Trim();
-                        ExecuteCommand($"products activate -f {path}");
-                        SetAppSetting(AppSettingKey.PRODUCTS_ACTIVATED);
-                    }
-
+                    ExecuteSetup(AppSettingKey.COINS_IMPORTED, "Importing coins...", $"coins import");
+                    ExecuteSetupWithInput(AppSettingKey.COINLOOKUPS_IMPORTED, "Enter path for coin lookups file: ", $"coinlookups import -f");
+                    ExecuteSetupWithInput(AppSettingKey.CREDS_IMPORTED, "Enter path for credentials file: ", $"credentials import -f");
+                    ExecuteSetup(AppSettingKey.PRODUCTS_IMPORTED, "Importing products...", $"products import");
+                    ExecuteSetupWithInput(AppSettingKey.PRODUCTS_ACTIVATED, "Enter path for active products file: ", $"products activate -f");
                     setupComplete = true;
                 }
                 catch (Exception ex)
@@ -83,6 +45,29 @@ namespace CryptoTax.ConsoleApp.Application
                 }
 
             } while (!setupComplete);
+
+            void ExecuteSetupWithInput(string appSettingKey, string prompt, string command)
+            {
+                bool setting = _appSettings.Get<bool>(appSettingKey);
+                if (!setting)
+                {
+                    Output.Write(prompt);
+                    string commandArg = Console.ReadLine().Trim();
+                    ExecuteCommand($"{command} {commandArg}");
+                    SetAppSetting(appSettingKey);
+                }
+            }
+
+            void ExecuteSetup(string appSettingKey, string prompt, string command)
+            {
+                bool setting = _appSettings.Get<bool>(appSettingKey);
+                if (!setting)
+                {
+                    Output.WriteLine(prompt);
+                    ExecuteCommand(command);
+                    SetAppSetting(appSettingKey);
+                }
+            }
 
             void SetAppSetting(string key) => _appSettings.AddOrUpdate(key, true);
         }
