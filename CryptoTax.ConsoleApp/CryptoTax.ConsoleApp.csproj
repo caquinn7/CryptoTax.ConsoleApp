@@ -38,7 +38,6 @@
     <None Remove="Database\" />
     <None Remove="Database\db_schema.sql" />
     <None Remove="Database\crypto_tax.db" />
-    <None Remove="App\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
@@ -75,7 +74,6 @@
     <Folder Include="Commands\Factory\" />
     <Folder Include="Commands\Implementations\" />
     <Folder Include="Database\" />
-    <Folder Include="App\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptoTaxV3.Domain\CryptoTaxV3.Domain.csproj" />

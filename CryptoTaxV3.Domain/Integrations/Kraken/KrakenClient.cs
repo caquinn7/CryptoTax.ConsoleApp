@@ -26,22 +26,30 @@ namespace CryptoTaxV3.Domain.Integrations.Kraken
 
         public async Task<IEnumerable<KrakenLedgerEntryDto>> GetLedgerEntriesAsync()
         {
-            JObject response = await QueryPrivateAsync("Ledgers", "&type=trade");
-
-            var errors = (JArray)response["error"];
-            if (errors.Any())
-            {
-                string err = string.Join("\n", errors);
-                throw new Exception(err);
-            }
-
+            int totalEntries;
+            int offset = 0;
             var entries = new List<KrakenLedgerEntryDto>();
-            foreach (var kvp in (JObject)response["result"]["ledger"])
+            do
             {
-                var entry = kvp.Value.ToObject<KrakenLedgerEntryDto>();
-                entry.LedgerId = kvp.Key;
-                entries.Add(entry);
-            }
+                JObject response = await QueryPrivateAsync("Ledgers", $"&type=all&ofs={offset}");
+
+                var errors = (JArray)response["error"];
+                if (errors.Any())
+                {
+                    throw new Exception(string.Join("\n", errors));
+                }
+
+                totalEntries = (int)response["result"]["count"];
+                foreach (var kvp in (JObject)response["result"]["ledger"])
+                {
+                    var entry = kvp.Value.ToObject<KrakenLedgerEntryDto>();
+                    entry.LedgerId = kvp.Key;
+                    entries.Add(entry);
+                }
+                offset = entries.Count;
+
+            } while (entries.Count < totalEntries);
+
             return entries;
         }
 

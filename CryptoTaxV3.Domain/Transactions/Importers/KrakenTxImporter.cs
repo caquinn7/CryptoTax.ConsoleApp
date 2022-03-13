@@ -24,7 +24,9 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
             try
             {
                 IEnumerable<KrakenLedgerEntryDto> ledgerEntries = await _krakenClient.GetLedgerEntriesAsync();
-                result.Transactions = ledgerEntries.Select(e => e.ToTransaction());
+                result.Transactions = ledgerEntries
+                    .Where(e => e.Type == "receive" || e.Type == "sale" || e.Type == "trade")
+                    .Select(e => e.ToTransaction());
             }
             catch (Exception ex)
             {
