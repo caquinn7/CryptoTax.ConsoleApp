@@ -21,26 +21,9 @@ namespace CryptoTax.ConsoleApp
         {
             return base
                 .Create(url)
-                .Configure(settings => settings.AfterCall = LogRequest)
-                .Configure(settings => settings.OnErrorAsync = LogFailedRequestAsync);
+                .Configure(settings => settings.AfterCallAsync = LogRequestAsync);
 
-            void LogRequest(FlurlCall httpCall)
-            {
-                try
-                {
-                    // only log successful calls b/c unsuccessful ones will be logged in other method
-                    if (httpCall.HttpResponseMessage.IsSuccessStatusCode)
-                    {
-                        _logger.LogInformation("{httpCall}", httpCall);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Unable to log request");
-                }
-            }
-
-            async Task LogFailedRequestAsync(FlurlCall httpCall)
+            async Task LogRequestAsync(FlurlCall httpCall)
             {
                 try
                 {
@@ -50,14 +33,14 @@ namespace CryptoTax.ConsoleApp
                         ["RequestHeaders"] = httpCall.Request.Headers,
                         ["StatusCode"] = httpCall.Response?.StatusCode,
                         ["ReasonPhrase"] = httpCall.Response?.ResponseMessage.ReasonPhrase,
-                        ["ResponseBody"] = await httpCall.Response?.ResponseMessage.Content.ReadAsStringAsync(),
+                        ["ResponseBody"] = await httpCall.Response?.ResponseMessage?.Content?.ReadAsStringAsync(),
                         ["Completed"] = httpCall.Completed,
                         ["Succeeded"] = httpCall.Succeeded,
                         ["Duration"] = httpCall.Duration,
                     };
                     using (_logger.BeginScope(logProps))
                     {
-                        _logger.LogError(httpCall.Exception, "{requestData}", logProps);
+                        _logger.LogInformation("{requestData}", logProps);
                     }
                 }
                 catch (Exception ex)

@@ -51,9 +51,8 @@ namespace CryptoTax.ConsoleApp.Application
                 bool setting = _appSettings.Get<bool>(appSettingKey);
                 if (!setting)
                 {
-                    Output.Write(prompt);
-                    string commandArg = Console.ReadLine().Trim();
-                    ExecuteCommand($"{command} {commandArg}");
+                    Output.Write(ConsoleColor.Blue, prompt);
+                    ExecuteCommand($"{command} {Console.ReadLine().Trim()}");
                     SetAppSetting(appSettingKey);
                 }
             }
@@ -63,7 +62,7 @@ namespace CryptoTax.ConsoleApp.Application
                 bool setting = _appSettings.Get<bool>(appSettingKey);
                 if (!setting)
                 {
-                    Output.WriteLine(prompt);
+                    Output.WriteLine(ConsoleColor.Blue, prompt);
                     ExecuteCommand(command);
                     SetAppSetting(appSettingKey);
                 }
