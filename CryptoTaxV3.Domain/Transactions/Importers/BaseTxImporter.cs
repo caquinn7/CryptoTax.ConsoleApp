@@ -13,12 +13,14 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
             this.logger = logger;
         }
 
-        protected Guid LogError(Exception ex, TxSource source)
+        protected abstract TxSource Source { get; }
+
+        protected Guid LogError(Exception ex)
         {
             var errId = Guid.NewGuid();
             using (logger.BeginScope(new Dictionary<string, object> { ["ErrId"] = errId }))
             {
-                logger.LogError(ex, "Error importing from {source}. ErrId: {errId}", source, errId);
+                logger.LogError(ex, "Error importing from {source}. ErrId: {errId}", Source, errId);
             };
             return errId;
         }

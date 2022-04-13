@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CryptoTaxV3.Domain.Transactions.Importers
 {
-    public class CoinbaseProTxImporter : BaseTxImporter, ITxImporter
+    public class CoinbaseProTxImporter: BaseTxImporter, ITxImporter
     {
         private readonly ICoinbaseProClient _coinbaseProClient;
         private readonly IMarkets _markets;
@@ -16,11 +16,13 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
         public CoinbaseProTxImporter(
             ICoinbaseProClient coinbaseProClient,
             IMarkets markets,
-            ILogger<CoinbaseProTxImporter> logger) : base(logger)
+            ILogger<BaseTxImporter> logger) : base(logger)
         {
             _coinbaseProClient = coinbaseProClient;
             _markets = markets;
         }
+
+        protected override TxSource Source => TxSource.CoinbasePro;
 
         public async Task<ImportResult> GetTransactionsAsync()
         {
@@ -32,11 +34,11 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
                 var fills = await Task.WhenAll(fillTasks);
                 result.Transactions = fills
                     .SelectMany(fs => fs.Select(f => f.ToTransactions()))
-                    .SelectMany(fs => (new Transaction[] { fs.Item1, fs.Item2 }));
+                    .SelectMany(fs => new Transaction[] { fs.Item1, fs.Item2 });
             }
             catch (Exception ex)
             {
-                var errId = LogError(ex, TxSource.CoinbasePro);
+                var errId = LogError(ex);
                 result.ErrorId = errId;
             }
             return result;

@@ -17,7 +17,6 @@
     <None Remove="Microsoft.Extensions.Configuration.FileExtensions" />
     <None Remove="appsettings.json" />
     <None Remove="Microsoft.Extensions.Configuration.EnvironmentVariables" />
-    <None Remove="appsettings.Development.json" />
     <None Remove="Serilog.Settings.Configuration" />
     <None Remove="Serilog.Extensions.Hosting" />
     <None Remove="Serilog.Sinks.Console" />
@@ -60,9 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\crypto_tax.db">

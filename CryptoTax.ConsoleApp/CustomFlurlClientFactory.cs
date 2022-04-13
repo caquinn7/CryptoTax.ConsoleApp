@@ -21,14 +21,25 @@ namespace CryptoTax.ConsoleApp
         {
             return base
                 .Create(url)
-                .Configure(settings => settings.AfterCallAsync = LogRequestAsync);
+                .Configure(settings => settings.BeforeCall = LogBefore)
+                .Configure(settings => settings.AfterCallAsync = LogAfterAsync);
 
-            async Task LogRequestAsync(FlurlCall httpCall)
+            void LogBefore(FlurlCall httpCall)
+            {
+                var logProps = new Dictionary<string, object> { ["Console"] = true };
+                using (_logger.BeginScope(logProps))
+                {
+                    _logger.LogInformation("{verb} {url}", httpCall.Request.Verb, httpCall.Request.Url);
+                }
+            }
+
+            async Task LogAfterAsync(FlurlCall httpCall)
             {
                 try
                 {
                     var logProps = new Dictionary<string, object>
                     {
+                        ["Http"] = true,
                         ["Request"] = httpCall,
                         ["RequestHeaders"] = httpCall.Request.Headers,
                         ["StatusCode"] = httpCall.Response?.StatusCode,
@@ -40,12 +51,12 @@ namespace CryptoTax.ConsoleApp
                     };
                     using (_logger.BeginScope(logProps))
                     {
-                        _logger.LogInformation("{requestData}", logProps);
+                        _logger.LogInformation("{props}", logProps);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unable to log request");
+                    _logger.LogError(ex, "Error logging request");
                 }
             }
         }

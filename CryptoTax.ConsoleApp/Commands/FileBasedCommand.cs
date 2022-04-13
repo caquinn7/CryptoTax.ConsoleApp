@@ -1,4 +1,5 @@
-﻿using CryptoTax.ConsoleApp.Application;
+﻿using System;
+using CryptoTax.ConsoleApp.Application;
 using CryptoTaxV3.Domain.AppSettings;
 
 namespace CryptoTax.ConsoleApp.Commands
@@ -24,7 +25,13 @@ namespace CryptoTax.ConsoleApp.Commands
                 _appSettings.AddOrUpdate(appSettingKey, filePath);
                 return filePath;
             }
-            return _appSettings.Get<string>(appSettingKey);
+
+            filePath = _appSettings.Get<string>(appSettingKey);
+            if (filePath is null)
+            {
+                throw new Exception("Unable to determine filepath argument");
+            }
+            return filePath;
         }
     }
 }

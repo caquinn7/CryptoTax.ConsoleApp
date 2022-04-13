@@ -32,13 +32,14 @@ namespace CryptoTaxV3.Domain.FormEntries
             List<FormEntryTx> prevIncomingTxs,
             ILogger<FormEntries> logger)
         {
+            logger.LogInformation("begin processing tx {id}", outgoingTx.Id);
             var results = new List<FormEntry>();
             for (int i = 0; i < prevIncomingTxs.Count && outgoingTx.Quantity > 0; i++)
             {
                 var incomingTx = prevIncomingTxs[i];
 
-                logger.LogDebug("outgoingTx: {tx}", outgoingTx);
-                logger.LogDebug("incomingTx: {tx}", incomingTx);
+                logger.LogInformation("outgoingTx: {tx}", outgoingTx);
+                logger.LogInformation("incomingTx: {tx}", incomingTx);
 
                 var (entryQty, inQty, outQty) = GetNewQuantities(incomingTx, outgoingTx);
                 incomingTx.Quantity = inQty;
@@ -74,9 +75,7 @@ namespace CryptoTaxV3.Domain.FormEntries
             {
                 throw new InvalidOperationException($"All transactions must have the same {nameof(TransactionDto.Asset)}");
             }
-            return txs
-                .Select(t => new FormEntryTx(t))
-                .OrderBy(t => t.Timestamp);
+            return txs.Select(t => new FormEntryTx(t)).OrderBy(t => t.Timestamp);
         }
 
         private static (decimal entryQty, decimal inTxQty, decimal outTxQty) GetNewQuantities(FormEntryTx inTx, FormEntryTx outTx)

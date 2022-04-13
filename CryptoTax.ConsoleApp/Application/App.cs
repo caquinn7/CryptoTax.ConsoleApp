@@ -31,11 +31,11 @@ namespace CryptoTax.ConsoleApp.Application
             {
                 try
                 {
-                    ExecuteSetup(AppSettingKey.COINS_IMPORTED, "Importing coins...", $"coins import");
-                    ExecuteSetupWithInput(AppSettingKey.COINLOOKUPS_IMPORTED, "Enter path for coin lookups file: ", $"coinlookups import -f");
-                    ExecuteSetupWithInput(AppSettingKey.CREDS_IMPORTED, "Enter path for credentials file: ", $"credentials import -f");
-                    ExecuteSetup(AppSettingKey.PRODUCTS_IMPORTED, "Importing products...", $"products import");
-                    ExecuteSetupWithInput(AppSettingKey.PRODUCTS_ACTIVATED, "Enter path for active products file: ", $"products activate -f");
+                    ExecuteSetup(AppSettingKey.COINS_IMPORTED, "Importing coins...", $"coins import", false);
+                    ExecuteSetup(AppSettingKey.COINLOOKUPS_IMPORTED, "Enter path for coin lookups file: ", $"coinlookups import -f", true);
+                    ExecuteSetup(AppSettingKey.CREDS_IMPORTED, "Enter path for credentials file: ", $"credentials import -f", true);
+                    ExecuteSetup(AppSettingKey.PRODUCTS_IMPORTED, "Importing products...", $"products import", false);
+                    ExecuteSetup(AppSettingKey.PRODUCTS_ACTIVATED, "Enter path for active products file: ", $"products activate -f", true);
                     setupComplete = true;
                 }
                 catch (Exception ex)
@@ -46,24 +46,21 @@ namespace CryptoTax.ConsoleApp.Application
 
             } while (!setupComplete);
 
-            void ExecuteSetupWithInput(string appSettingKey, string prompt, string command)
+            void ExecuteSetup(string appSettingKey, string prompt, string command, bool needInput)
             {
                 bool setting = _appSettings.Get<bool>(appSettingKey);
                 if (!setting)
                 {
-                    Output.Write(ConsoleColor.Blue, prompt);
-                    ExecuteCommand($"{command} {Console.ReadLine().Trim()}");
-                    SetAppSetting(appSettingKey);
-                }
-            }
-
-            void ExecuteSetup(string appSettingKey, string prompt, string command)
-            {
-                bool setting = _appSettings.Get<bool>(appSettingKey);
-                if (!setting)
-                {
-                    Output.WriteLine(ConsoleColor.Blue, prompt);
-                    ExecuteCommand(command);
+                    if (needInput)
+                    {
+                        Output.Write(ConsoleColor.Blue, prompt);
+                        ExecuteCommand($"{command} {Console.ReadLine().Trim()}");
+                    }
+                    else
+                    {
+                        Output.WriteLine(ConsoleColor.Blue, prompt);
+                        ExecuteCommand(command);
+                    }
                     SetAppSetting(appSettingKey);
                 }
             }
@@ -78,6 +75,8 @@ namespace CryptoTax.ConsoleApp.Application
             {
                 Output.WritePrompt();
                 input = Console.ReadLine().Trim();
+                if (input.ToLower() == "quit") break;
+
                 try
                 {
                     ExecuteCommand(input);

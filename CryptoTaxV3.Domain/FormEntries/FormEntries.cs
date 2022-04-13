@@ -26,6 +26,8 @@ namespace CryptoTaxV3.Domain.FormEntries
 
         public void ExportToCsv(int? taxYear, string asset, string folderPath, bool splitByTerm)
         {
+            _logger.LogInformation("Generating form entries for asset {asset} in tax year {year}", asset, taxYear);
+
             var txs = _transactions.Get()
                 .Where(t => t.Asset != "USD")
                 .Where(t => asset is null || t.Asset == asset);

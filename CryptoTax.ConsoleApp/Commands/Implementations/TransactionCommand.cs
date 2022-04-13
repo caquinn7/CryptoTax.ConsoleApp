@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CryptoTax.ConsoleApp.Application;
 using CryptoTaxV3.Domain.AppSettings;
 using CryptoTaxV3.Domain.Transactions;

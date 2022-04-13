@@ -13,14 +13,16 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
 
         public KrakenTxImporter(
             IKrakenClient krakenClient,
-            ILogger<KrakenTxImporter> logger) : base(logger)
+            ILogger<BaseTxImporter> logger) : base(logger)
         {
             _krakenClient = krakenClient;
         }
 
+        protected override TxSource Source => TxSource.Kraken;
+
         public async Task<ImportResult> GetTransactionsAsync()
         {
-            var result = new ImportResult { Source = TxSource.Kraken };
+            var result = new ImportResult { Source = Source };
             try
             {
                 IEnumerable<KrakenLedgerEntryDto> ledgerEntries = await _krakenClient.GetLedgerEntriesAsync();
@@ -30,7 +32,7 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
             }
             catch (Exception ex)
             {
-                var errId = LogError(ex, TxSource.Kraken);
+                var errId = LogError(ex);
                 result.ErrorId = errId;
             }
             return result;

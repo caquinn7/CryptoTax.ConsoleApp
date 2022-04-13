@@ -16,15 +16,17 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
         public CoinbaseTxImporter(
             ICoinbaseClient coinbaseClient,
             IAccounts accounts,
-            ILogger<CoinbaseTxImporter> logger) : base(logger)
+            ILogger<BaseTxImporter> logger) : base(logger)
         {
             _coinbaseClient = coinbaseClient;
             _accounts = accounts;
         }
 
+        protected override TxSource Source => TxSource.Coinbase;
+
         public async Task<ImportResult> GetTransactionsAsync()
         {
-            var result = new ImportResult { Source = TxSource.Coinbase };
+            var result = new ImportResult { Source = Source };
             try
             {
                 result.Transactions = (await GetCoinbaseTransactionsAsync())
@@ -33,7 +35,7 @@ namespace CryptoTaxV3.Domain.Transactions.Importers
             }
             catch (Exception ex)
             {
-                var errId = LogError(ex, TxSource.Coinbase);
+                var errId = LogError(ex);
                 result.ErrorId = errId;
             }
             return result;

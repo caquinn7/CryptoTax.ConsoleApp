@@ -7,7 +7,7 @@
         public const string FORM_ENTRIES_FOLDER = "FormEntriesFolder";
         public const string TXS_INFILE = "TransactionsImportFile";
         public const string TXS_OUTFILE = "TransactionsExportFile";
-        public const string LOGS_OUTFILE = "LogsExportFile";
+        public const string LOGS_OUTFOLDER = "LogsExportFolder";
         public const string PRODUCTS_FILE = "ProductsFile";
 
         public const string COINS_IMPORTED = "CoinsImported";

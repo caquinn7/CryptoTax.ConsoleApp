@@ -40,12 +40,6 @@ namespace CryptoTaxV3.Domain.Transactions
 
         public async Task<IEnumerable<ImportResultDto>> ImportFromSourcesAsync()
         {
-            Task<ImportResult> ImportFromSourceAsync(Source source)
-            {
-                var importer = _importerFactory.GetImporter(Enum.Parse<TxSource>(source.Name));
-                return importer.GetTransactionsAsync();
-            }
-
             var sources = _sources.GetActive();
             ImportResult[] importResults = await Task.WhenAll(sources.Select(ImportFromSourceAsync));
 
@@ -70,6 +64,12 @@ namespace CryptoTaxV3.Domain.Transactions
                 Count = r.ErrorId != null ? null
                     : newTxs.Count(t => t.Source == r.Source.ToString())
             });
+
+            Task<ImportResult> ImportFromSourceAsync(Source source)
+            {
+                var importer = _importerFactory.GetImporter(Enum.Parse<TxSource>(source.Name));
+                return importer.GetTransactionsAsync();
+            }
         }
 
         public async Task<int> ImportFromCsvAsync(string filePath)

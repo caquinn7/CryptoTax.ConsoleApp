@@ -14,13 +14,16 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
 
         public void Execute(CommandArgs args)
         {
-            var logsPath = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}/log.txt";
+            var logsPath = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}/logs";
+            var destination = $"{GetFilePath(args, AppSettingKey.LOGS_OUTFOLDER)}/Logs_{DateTime.Now:yyyy-MM-ddTHH-mm-ss}";
+            Directory.CreateDirectory(destination);
 
-            var fileName = $"log_{DateTime.Now:yyyy-MM-ddTHH-mm-ss}.txt";
-            var outputPath = $"{GetFilePath(args, AppSettingKey.LOGS_OUTFILE)}/{fileName}";
-
-            File.Copy(logsPath, outputPath, true);
-            Output.WriteLine("Logs exported to " + outputPath);
+            var files = new DirectoryInfo(logsPath).GetFiles();
+            foreach (var file in files)
+            {
+                File.Copy(file.FullName, $"{destination}/{file.Name}", overwrite: true);
+            }
+            Output.WriteLine("Logs exported to " + destination);
         }
     }
 }

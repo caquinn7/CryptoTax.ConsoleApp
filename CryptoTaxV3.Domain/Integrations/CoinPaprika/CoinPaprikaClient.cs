@@ -8,20 +8,19 @@ namespace CryptoTaxV3.Domain.Integrations.CoinPaprika
 {
     public class CoinPaprikaClient : ICoinPaprikaClient
     {
-        private readonly IFlurlClient _flurlClient;
+        private readonly IFlurlClient _client;
 
         public CoinPaprikaClient(IFlurlClientFactory flurlClientFactory)
         {
-            _flurlClient = flurlClientFactory.Get("https://api.coinpaprika.com");
+            _client = flurlClientFactory.Get("https://api.coinpaprika.com");
         }
 
         public Task<IEnumerable<Coin>> GetCoinsAsync() =>
-            _flurlClient
-                .Request("/v1/coins")
-                .GetJsonAsync<IEnumerable<Coin>>();
+            _client.Request("/v1/coins").GetJsonAsync<IEnumerable<Coin>>();
 
-        public Task<IEnumerable<CoinPaprikaPriceDto>> GetHistoricalCoinDataAsync(string coinId, long start, string interval, int limit) =>
-            _flurlClient
+        public Task<IEnumerable<CoinPaprikaPriceDto>> GetHistoricalCoinDataAsync(
+            string coinId, long start, string interval, int limit) =>
+            _client
                 .Request($"/v1/tickers/{coinId}/historical")
                 .SetQueryParams(new { start, interval, limit })
                 .GetJsonAsync<IEnumerable<CoinPaprikaPriceDto>>();
