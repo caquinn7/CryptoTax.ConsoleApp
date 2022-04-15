@@ -31,11 +31,11 @@ namespace CryptoTax.ConsoleApp.Application
             {
                 try
                 {
-                    ExecuteSetup(AppSettingKey.COINS_IMPORTED, "Importing coins...", $"coins import", false);
-                    ExecuteSetup(AppSettingKey.COINLOOKUPS_IMPORTED, "Enter path for coin lookups file: ", $"coinlookups import -f", true);
-                    ExecuteSetup(AppSettingKey.CREDS_IMPORTED, "Enter path for credentials file: ", $"credentials import -f", true);
-                    ExecuteSetup(AppSettingKey.PRODUCTS_IMPORTED, "Importing products...", $"products import", false);
-                    ExecuteSetup(AppSettingKey.PRODUCTS_ACTIVATED, "Enter path for active products file: ", $"products activate -f", true);
+                    ExecuteSetup(AppSettingKey.COINS_IMPORTED, "Importing coins...", "coins import", false);
+                    ExecuteSetup(AppSettingKey.COINLOOKUPS_IMPORTED, "Enter path for coin lookups file: ", "coinlookups import -f", true);
+                    ExecuteSetup(AppSettingKey.CREDS_IMPORTED, "Enter path for credentials file: ", "credentials import -f", true);
+                    ExecuteSetup(AppSettingKey.PRODUCTS_IMPORTED, "Importing products...", "products import", false);
+                    ExecuteSetup(AppSettingKey.PRODUCTS_ACTIVATED, "Enter path for active products file: ", "products activate -f", true);
                     setupComplete = true;
                 }
                 catch (Exception ex)
