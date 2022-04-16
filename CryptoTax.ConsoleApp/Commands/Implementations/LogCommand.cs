@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using CryptoTax.ConsoleApp.Application;
 using CryptoTaxV3.Domain.AppSettings;
 
@@ -14,7 +13,7 @@ namespace CryptoTax.ConsoleApp.Commands.Implementations
 
         public void Execute(CommandArgs args)
         {
-            var logsPath = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}/logs";
+            var logsPath = $"{AppContext.BaseDirectory}logs";
             var destination = $"{GetFilePath(args, AppSettingKey.LOGS_OUTFOLDER)}/Logs_{DateTime.Now:yyyy-MM-ddTHH-mm-ss}";
             Directory.CreateDirectory(destination);
 
